@@ -79,7 +79,7 @@ void DBmem :: addArticle(string title, string author, string text, int newsGroup
     newsGroups.at(newsGroupId).addArticle(title, author, text);
 }
 
-pair<int,Article> DBmem :: getArticle(int articleId, int newGroupId) const {
+Article DBmem :: getArticle(int articleId, int newGroupId) const {
     // Get an article
     //return newsGroups[newGroupId].getArticle(articleId);
     return newsGroups.at(newGroupId).getArticle(articleId);

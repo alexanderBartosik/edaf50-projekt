@@ -1,0 +1,40 @@
+#ifndef DB_H
+#define DB_H
+
+#include "dBinterface.h"
+#include "newsgroup.h"
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
+
+class DB : public DBinterface {
+
+public:
+    
+    DB() {}
+
+    std::list<NewsGroup> listNewsGroup() const;
+
+    void addNewsGroup(string newsGroupName);
+
+    std::string getNewsGroup(string newsGroupName) const;
+
+    void removeNewsGroup(int newsGroupId);
+
+    std::list<Article> listArticles(int newsGroupId) const;
+
+    void addArticle(string title, string author, string text, int newGroupId);
+
+    Article getArticle(int articleId, int newGroupId) const;
+
+    void removeArticle(int articleId, int newsGroupId);
+
+    ~DB() {}
+
+private:
+    int newsGroupId = 0;
+    std::map<int, NewsGroup> newsGroups;
+};
+
+#endif
