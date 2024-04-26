@@ -5,7 +5,7 @@
 CommandHandler::CommandHandler(shared_ptr<Connection>& c): conn(c) {}
 
 //myclient.cc tar Connection&, idk?
-CommandHandler::CommandHandler(Connection& c) conn(c) {}
+CommandHandler::CommandHandler(Connection& c): conn(&c) {}
 
 
 
@@ -18,7 +18,7 @@ void CommandHandler::send_int(int val) {
     conn->write(val & 0xFF);
 }
 
-void CommandHandler::send_string(string val){
+void CommandHandler::send_string(std::string val){
     send_command(Protocol::PAR_STRING);
     int length = static_cast<int>(val.length());
     send_int(length);
@@ -43,8 +43,8 @@ int CommandHandler::receive_int() {
 }
 
 //om byten innan var PAR_STRING, kalla på denna
-string CommandHandler::receive_string() {
-        string s;
+std::string CommandHandler::receive_string() {
+        std::string s;
         char   ch;
         while ((ch = conn->read()) != '$') {
                 s += ch;

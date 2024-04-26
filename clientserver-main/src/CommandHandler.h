@@ -3,10 +3,10 @@
 
 #include "../include/protocol.h"
 #include "../include/connection.h"
-#include "<memory>"
+#include <memory> 
+#include <string>
 
 using std::shared_ptr;
-using std::string;
 
 
 /*
@@ -28,17 +28,16 @@ class CommandHandler {
     CommandHandler(Connection& conn);
 
     void send_int(int val); //sends PAR_NUM val
-    void send_string(string str); //sends PAR_STRING N str (conn.write char by char)
+    void send_string(std::string str); //sends PAR_STRING N str (conn.write char by char)
     void send_command(Protocol code); 
 
     int receive_int();
-    string receive_string();
+    std::string receive_string();
     Protocol receive_command();
 
 
     private:
     shared_ptr<Connection> conn;
-
 };
 
 #endif
