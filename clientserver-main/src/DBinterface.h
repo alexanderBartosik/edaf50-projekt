@@ -21,7 +21,7 @@ public:
 
     virtual void addArticle(string title, string author, string text, int newGroupId) = 0;
 
-    virtual pair<int, Article> getArticle(int articleId, int newGroupId) const = 0;
+    virtual Article getArticle(int articleId, int newGroupId) const = 0;
 
     virtual void removeArticle(int articleId, int newsGroupId) = 0;
 

@@ -7,23 +7,27 @@
 
 class DBmem : public DBinterface {
 public:
-    virtual std::list<NewsGroup> listNewsGroup() const = 0;
 
-    virtual void addNewsGroup(string newsGroupName) = 0;
+    DBmem() {}
 
-    virtual std::string getNewsGroup(string newsGroupName) const = 0;
+    std::list<NewsGroup> listNewsGroup() const = 0;
 
-    virtual void removeNewsGroup(int newsGroupId) = 0;
+    void addNewsGroup(string newsGroupName) = 0;
 
-    virtual std::list<Article> listArticles(int newsGroupId) const = 0;
+    std::string getNewsGroup(string newsGroupName) const = 0;
 
-    virtual void addArticle(string title, string author, string text, int newGroupId) = 0;
+    void removeNewsGroup(int newsGroupId) = 0;
 
-    virtual pair<int,Article> getArticle(int articleId, int newGroupId) const = 0;
+    std::list<Article> listArticles(int newsGroupId) const = 0;
 
-    virtual void removeArticle(int articleId, int newsGroupId) = 0;
+    void addArticle(string title, string author, string text, int newGroupId) = 0;
 
-    virtual ~DBmem() {}
+    //virtual pair<int,Article> getArticle(int articleId, int newGroupId) const = 0;
+    Article getArticle(int articleId, int newGroupId) const = 0;
+
+    void removeArticle(int articleId, int newsGroupId) = 0;
+
+    ~DBmem() {}
 
 private:
     int newsGroupId = 0;

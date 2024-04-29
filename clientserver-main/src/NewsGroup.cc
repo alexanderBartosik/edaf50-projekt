@@ -20,11 +20,11 @@ int NewsGroup :: getId() const {
     return id;
 }
 
-pair<int, Article> NewsGroup :: getArticle(int articleId) const {
+Article NewsGroup :: getArticle(int articleId) const {
     // Get article
     for (auto i : articles) {
         if (i.first == articleId) {
-            return i;
+            return i.second;
             //return make_pair(i.first, i.second);
         }
     }

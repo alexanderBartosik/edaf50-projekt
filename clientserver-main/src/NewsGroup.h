@@ -14,7 +14,8 @@ public:
 
     int getId() const;
 
-    std::pair<int, Article> getArticle(int id) const;
+    //std::pair<int, Article> getArticle(int id) const;
+    Article getArticle(int id) const;
 
     std::list<Article> getArticles() const;
 
