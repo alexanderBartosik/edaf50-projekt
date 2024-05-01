@@ -26,17 +26,18 @@ list<NewsGroup> DBmem :: listNewsGroup() const {
     return newsGroupList;
 }
 
-void DBmem :: addNewsGroup(string newsGroupName) {
+bool DBmem :: addNewsGroup(string newsGroupName) {
     // Add a news group
     for(auto i : newsGroups){
         if(i.second.getName() == newsGroupName){
             cout << "News group already exists" << endl;
-            return;
+            return false;
         }
     }
     NewsGroup newsGroup(newsGroupName, newsGroupId);
     newsGroups.insert({newsGroupId, newsGroup});
     newsGroupId++;
+    return true;
 }
 
 string DBmem :: getNewsGroup(string newsGroupName) const {
@@ -49,15 +50,16 @@ string DBmem :: getNewsGroup(string newsGroupName) const {
     return "News group not found";
 }
 
-void DBmem :: removeNewsGroup(int newsGroupId) {
+bool DBmem :: removeNewsGroup(int newsGroupId) {
     // Remove a news group
     for(auto i : newsGroups){
         if(i.second.getId() == newsGroupId){
             newsGroups.erase(i.first);
-            return;
+            return true;
         }
     }
     cout << "News group not found" << endl;
+    return false;
 }
 
 list<Article> DBmem :: listArticles(int newsGroupId) const {
@@ -73,10 +75,11 @@ list<Article> DBmem :: listArticles(int newsGroupId) const {
     return articleList;
 }
 
-void DBmem :: addArticle(string title, string author, string text, int newsGroupId) {
+bool DBmem :: addArticle(string title, string author, string text, int newsGroupId) {
     // Add an article to a news group
     //newsGroups[newGroupId].addArticle(title, author, text);
     newsGroups.at(newsGroupId).addArticle(title, author, text);
+    return true;
 }
 
 Article DBmem :: getArticle(int articleId, int newGroupId) const {
@@ -85,10 +88,11 @@ Article DBmem :: getArticle(int articleId, int newGroupId) const {
     return newsGroups.at(newGroupId).getArticle(articleId);
 }
 
-void DBmem :: removeArticle(int articleId, int newsGroupId) {
+bool DBmem :: removeArticle(int articleId, int newsGroupId) {
     // Remove an article
     //newsGroups[newsGroupId].removeArticle(articleId);
     newsGroups.at(newsGroupId).removeArticle(articleId);
+    return true;
 }
 
 

@@ -16,25 +16,28 @@ public:
 
     std::list<NewsGroup> listNewsGroup() const;
 
-    void addNewsGroup(string newsGroupName);
+    bool addNewsGroup(string newsGroupName);
 
     std::string getNewsGroup(string newsGroupName) const;
 
-    void removeNewsGroup(int newsGroupId);
+    bool removeNewsGroup(int newsGroupId);
 
     std::list<Article> listArticles(int newsGroupId) const;
 
-    void addArticle(string title, string author, string text, int newGroupId);
+    bool addArticle(string title, string author, string text, int newGroupId);
 
     Article getArticle(int articleId, int newGroupId) const;
 
-    void removeArticle(int articleId, int newsGroupId);
+    bool removeArticle(int articleId, int newsGroupId);
 
     ~DB() {}
 
 private:
     int newsGroupId = 0;
-    std::map<int, NewsGroup> newsGroups;
+    //std::map<int, NewsGroup> newsGroups;
+    fs::path dbPath = "database.db";
+    unordered_map<int, int> artID;  // Mapping from newsgroup ID to next article ID
+
 };
 
 #endif
