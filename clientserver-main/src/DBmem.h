@@ -10,22 +10,22 @@ public:
 
     DBmem() {}
 
-    std::list<NewsGroup> listNewsGroup() const = 0;
+    std::list<NewsGroup> listNewsGroup() const;
 
-    bool addNewsGroup(string newsGroupName) = 0;
+    bool addNewsGroup(string newsGroupName);;
 
-    std::string getNewsGroup(string newsGroupName) const = 0;
+    std::string getNewsGroup(string newsGroupName) const;
 
-    bool removeNewsGroup(int newsGroupId) = 0;
+    bool removeNewsGroup(int newsGroupId);
 
-    std::list<Article> listArticles(int newsGroupId) const = 0;
+    std::list<Article> listArticles(int newsGroupId) const;
 
-    bool addArticle(string title, string author, string text, int newGroupId) = 0;
+    bool addArticle(string title, string author, string text, int newGroupId);
 
     //virtual pair<int,Article> getArticle(int articleId, int newGroupId) const = 0;
-    Article getArticle(int articleId, int newGroupId) const = 0;
+    Article getArticle(int articleId, int newGroupId) const;
 
-    bool removeArticle(int articleId, int newsGroupId) = 0;
+    bool removeArticle(int articleId, int newsGroupId);
 
     ~DBmem() {}
 
