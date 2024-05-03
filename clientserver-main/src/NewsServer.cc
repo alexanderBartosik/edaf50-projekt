@@ -28,6 +28,7 @@ void list_articles() {
 void get_article(int ngId, int artID) {
 }
 
+//(myserver.cc)
 Server init(int argc, char* argv[]) {
         if (argc != 2) {
                 cerr << "Usage: myserver port-number" << endl;
@@ -50,12 +51,16 @@ Server init(int argc, char* argv[]) {
         return server;
 }
 
+DBmem* startDB() { //return ptr?
+    return new DBmem();
+}
+
 
 
 int main(int argc, char *argv[])
 {
     Server server = init(argc, argv);
-    //TODO: make database
+    DBmem *db = startDB();
 
     while (true)
     {
