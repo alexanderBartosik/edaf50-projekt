@@ -35,9 +35,12 @@ class CommandHandler {
     std::string receive_string();
     Protocol receive_command();
 
+    void assert_ended(); //throwar ConnectionClosedException om byten != COM_END
+
 
     private:
     shared_ptr<Connection> conn;
+    int read_int();
 };
 
 #endif
