@@ -16,7 +16,7 @@ using std::endl;
 
 
 
-void list_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) {//Alex
+void list_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {//Alex
     cmdh.assert_ended();
 
     std::list<NewsGroup> nglist = db->listNewsGroup();
@@ -33,7 +33,7 @@ void list_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) {//Alex
     cmdh.send_command(Protocol::ANS_END);
 } 
 
-void list_articles(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { 
+void list_articles(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { 
     cmdh.send_command(Protocol::ANS_LIST_ART);
 
     int newsGroupID = cmdh.receive_int();
@@ -58,7 +58,7 @@ void list_articles(CommandHandler cmdh, std::unique_ptr<DBinterface> db) {
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void get_article(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { 
+void get_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { 
     cmdh.send_command(Protocol::ANS_GET_ART);
 
     int newsGroupID = cmdh.receive_int();
@@ -81,7 +81,7 @@ void get_article(CommandHandler cmdh, std::unique_ptr<DBinterface> db) {
 
 
 
-void create_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //ALEX
+void create_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //ALEX
     string ngName = cmdh.receive_string();
 
     cmdh.assert_ended();
@@ -99,7 +99,7 @@ void create_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //ALEX
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void write_article(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //Alex
+void write_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Alex
     int ngId = cmdh.receive_int();
     string title = cmdh.receive_string();
     string author = cmdh.receive_string();
@@ -118,7 +118,7 @@ void write_article(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //Ale
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //Alex 
+void delete_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Alex 
     int ngId = cmdh.receive_int();
 
     cmdh.assert_ended();
@@ -134,7 +134,7 @@ void delete_ng(CommandHandler cmdh, std::unique_ptr<DBinterface> db) { //Alex
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_article(CommandHandler cmdh, std::unique_ptr<DBinterface> db) {
+void delete_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {
     int ngId = cmdh.receive_int();
     int artId = cmdh.receive_int();
 
@@ -202,8 +202,38 @@ int main(int argc, char *argv[])
 
                 switch(msg) {
                     //TODO: call methods depending on command
-                }
+                    case Protocol::COM_LIST_NG:
+                        list_ng(cmdh, db);
+                        break;
 
+                    case Protocol::COM_CREATE_NG:
+                        create_ng(cmdh, db);
+                        break;
+
+                    case Protocol::COM_DELETE_NG:
+                        delete_ng(cmdh, db);
+                        break;
+
+                    case Protocol::COM_LIST_ART:
+                        list_articles(cmdh, db);
+                        break;
+
+                    case Protocol::COM_CREATE_ART:
+                        write_article(cmdh, db);
+                        break;
+
+                    case Protocol::COM_DELETE_ART:
+                        delete_article(cmdh, db);
+                        break;
+
+                    case Protocol::COM_GET_ART:
+                        get_article(cmdh, db);
+                        break;
+
+                    default:
+                        cout << "Unknown command" << endl;
+                        break;
+                }
             }
             catch (ConnectionClosedException &)
             {
