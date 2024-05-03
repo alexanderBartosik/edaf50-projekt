@@ -58,7 +58,6 @@ bool DBmem :: removeNewsGroup(int newsGroupId) {
             return true;
         }
     }
-    cout << "News group not found" << endl;
     return false;
 }
 
@@ -77,22 +76,47 @@ list<Article> DBmem :: listArticles(int newsGroupId) const {
 
 bool DBmem :: addArticle(string title, string author, string text, int newsGroupId) {
     // Add an article to a news group
-    //newsGroups[newGroupId].addArticle(title, author, text);
+
+    //Checks if the news group DOES exist
+    if(newsGroups.find(newsGroupId) == newsGroups.end()){
+        return false;
+    }
     newsGroups.at(newsGroupId).addArticle(title, author, text);
     return true;
+
 }
 
 Article DBmem :: getArticle(int articleId, int newGroupId) const {
     // Get an article
     //return newsGroups[newGroupId].getArticle(articleId);
+
+    //Checks if newsgroup does not exist return an article with id -1
+    if(newsGroups.find(newGroupId) == newsGroups.end()){
+        return Article("","","", -1);
+    }
+    //Checks if article does not exist return an article with id -2
+    else if(newsGroups.at(newGroupId).getArticle(articleId).getId() == -2){
+        return Article("","","", -2);
+    }
     return newsGroups.at(newGroupId).getArticle(articleId);
 }
 
-bool DBmem :: removeArticle(int articleId, int newsGroupId) {
+int DBmem :: removeArticle(int articleId, int newsGroupId) {
     // Remove an article
-    //newsGroups[newsGroupId].removeArticle(articleId);
-    newsGroups.at(newsGroupId).removeArticle(articleId);
-    return true;
+    
+    //Check if the newsgroup doesnt exists
+    if(newsGroups.find(newsGroupId) == newsGroups.end()){
+        return -1;
+    }
+    //Check if the article exists
+    else if(newsGroups.at(newsGroupId).getArticle(articleId).getId() == -2){
+        return -2;
+    }
+    else{
+        newsGroups.at(newsGroupId).removeArticle(articleId);
+        return 0;
+    }
+    
 }
 
 

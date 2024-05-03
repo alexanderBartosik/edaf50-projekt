@@ -75,7 +75,7 @@ bool DB :: removeNewsGroup(int newsGroupId) {
     return true;
 }
 
-list<Article> DB ::  listArticles(int newsGroupId) const {
+list<Article> DB :: listArticles(int newsGroupId) const {
     list<Article> articles;
     fs::path groupPath = dbPath / to_string(newsGroupId);
     if (!fs::exists(groupPath)) return articles;  // Return empty list if group does not exist

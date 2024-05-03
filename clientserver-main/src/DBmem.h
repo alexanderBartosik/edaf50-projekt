@@ -25,7 +25,7 @@ public:
     //virtual pair<int,Article> getArticle(int articleId, int newGroupId) const = 0;
     Article getArticle(int articleId, int newGroupId) const;
 
-    bool removeArticle(int articleId, int newsGroupId);
+    int removeArticle(int articleId, int newsGroupId);
 
     ~DBmem() {}
 

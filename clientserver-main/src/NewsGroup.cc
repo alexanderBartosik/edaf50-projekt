@@ -28,6 +28,7 @@ Article NewsGroup :: getArticle(int articleId) const {
             //return make_pair(i.first, i.second);
         }
     }
+    return Article("", "", "", -2);
 }
 
 void NewsGroup :: addArticle(string title, string author, string text) {

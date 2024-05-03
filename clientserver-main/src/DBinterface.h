@@ -23,7 +23,7 @@ public:
 
     virtual Article getArticle(int articleId, int newGroupId) const = 0;
 
-    virtual bool removeArticle(int articleId, int newsGroupId) = 0;
+    virtual int removeArticle(int articleId, int newsGroupId) = 0;
 
     virtual ~DBinterface() {}
 };
