@@ -33,9 +33,9 @@ Article NewsGroup :: getArticle(int articleId) const {
 
 void NewsGroup :: addArticle(string title, string author, string text) {
     // Add article
-    Article article(title, author, text, id);
-    articles.insert({id, article});
-    id++;
+    Article article(title, author, text, articleId);
+    articles.emplace(articleId, article);
+    articleId++;
 }
 
 void NewsGroup :: removeArticle(int articleId) {

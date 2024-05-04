@@ -10,7 +10,7 @@ CommandHandler::CommandHandler(Connection& c): conn(&c) {}
 
 
 void CommandHandler::send_int(int val) {
-    send_command(Protocol::PAR_NUM);
+    send_command(Protocol::PAR_NUM); 
 
     conn->write((val >> 24) & 0xFF);
     conn->write((val >> 16) & 0xFF);
@@ -21,7 +21,12 @@ void CommandHandler::send_int(int val) {
 void CommandHandler::send_string(std::string val){
     send_command(Protocol::PAR_STRING);
     int length = static_cast<int>(val.length());
-    send_int(length);
+
+    //bryt ut ksk
+    conn->write((length >> 24) & 0xFF); 
+    conn->write((length >> 16) & 0xFF);
+    conn->write((length >> 8) & 0xFF);
+    conn->write(length & 0xFF);
 
     for (char c : val) {
         conn->write(c);

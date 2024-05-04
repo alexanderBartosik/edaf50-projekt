@@ -40,15 +40,15 @@ void list_articles(CommandHandler cmdh, DBinterface* db) {
     
     cmdh.assert_ended();
 
-
     cmdh.send_command(Protocol::ANS_LIST_ART);
 
-    std::list<Article> articles = db->listArticles(newsGroupID);
+    bool ngexists = db->newsGroupExists(newsGroupID);
 
-    cmdh.send_int(articles.size());
+    std::list<Article> articles = db->listArticles(newsGroupID);
+    cout << "nbr of articles in news group " << newsGroupID << ": " << articles.size() << endl;
 
     //If the newsgroup id does not exist
-    if (articles.size() == 0) { //TODO: check if this is correct
+    if (!ngexists) { //TODO: check if this is correct
         cmdh.send_command(Protocol::ANS_NAK);
         cmdh.send_command(Protocol::ERR_NG_DOES_NOT_EXIST);
     }
@@ -64,10 +64,12 @@ void list_articles(CommandHandler cmdh, DBinterface* db) {
 }
 
 void get_article(CommandHandler cmdh, DBinterface* db) { 
-    cmdh.send_command(Protocol::ANS_GET_ART);
-
     int newsGroupID = cmdh.receive_int();
     int articleID = cmdh.receive_int();
+
+    cmdh.assert_ended();
+
+    cmdh.send_command(Protocol::ANS_GET_ART);
 
     Article article = db->getArticle(articleID, newsGroupID);
 
@@ -104,6 +106,7 @@ void create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
     cmdh.send_command(Protocol::ANS_END);
 }
 
+
 void write_article(CommandHandler cmdh, DBinterface* db) { //Alex
     int ngId = cmdh.receive_int();
     string title = cmdh.receive_string();
@@ -113,6 +116,8 @@ void write_article(CommandHandler cmdh, DBinterface* db) { //Alex
     cmdh.assert_ended();
 
     bool created = db->addArticle(title, author, text, ngId);
+
+    cmdh.send_command(Protocol::ANS_CREATE_ART);
 
     if (created) {
         cmdh.send_command(Protocol::ANS_ACK);
@@ -129,6 +134,8 @@ void delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex
     cmdh.assert_ended();
 
     bool removed = db->removeNewsGroup(ngId);
+
+    cmdh.send_command(Protocol::ANS_DELETE_NG);
     
     if (removed) {
         cmdh.send_command(Protocol::ANS_ACK);
@@ -146,6 +153,8 @@ void delete_article(CommandHandler cmdh, DBinterface* db) {
     cmdh.assert_ended();
 
     int removed = db->removeArticle(artId, ngId);
+
+    cmdh.send_command(Protocol::ANS_DELETE_ART);
 
     if (removed == 0) {
         cmdh.send_command(Protocol::ANS_ACK);
@@ -205,6 +214,8 @@ int main(int argc, char *argv[])
             try
             {
                 Protocol msg = cmdh.receive_command();
+                int msgchar = static_cast<int>(msg);
+                cout << "msg: " << msgchar << endl;
 
                 switch(msg) {
                     //TODO: call methods depending on command

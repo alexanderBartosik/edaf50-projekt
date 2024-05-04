@@ -16,6 +16,8 @@ public:
 
     std::string getNewsGroup(string newsGroupName) const;
 
+    bool newsGroupExists(int newsGroupId) const;
+
     bool removeNewsGroup(int newsGroupId);
 
     std::list<Article> listArticles(int newsGroupId) const;

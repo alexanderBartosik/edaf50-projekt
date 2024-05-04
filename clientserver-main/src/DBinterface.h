@@ -15,6 +15,8 @@ public:
 
     virtual std::string getNewsGroup(string newsGroupName) const = 0;
 
+    virtual bool newsGroupExists(int newsGroupId) const = 0; 
+
     virtual bool removeNewsGroup(int newsGroupId) = 0;
 
     virtual std::list<Article> listArticles(int newsGroupId) const = 0;
