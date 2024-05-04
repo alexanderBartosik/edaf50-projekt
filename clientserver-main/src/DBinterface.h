@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <list>
-#include <NewsGroup.h>
+#include "NewsGroup.h"
 using namespace std;
 
 class DBinterface {

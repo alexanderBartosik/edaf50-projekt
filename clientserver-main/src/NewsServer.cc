@@ -5,18 +5,20 @@
 #include "CommandHandler.h"
 
 #include "DBinterface.h" //?
-#include "DB.h"
+//#include "DB.h"
 #include "DBmem.h"
 #include <iostream>
+#include <memory>
 
 using std::string;
 using std::cerr;
 using std::cout;
 using std::endl;
+using std::unique_ptr;
 
 
 
-void list_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {//Alex
+void list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
     cmdh.assert_ended();
 
     std::list<NewsGroup> nglist = db->listNewsGroup();
@@ -33,10 +35,13 @@ void list_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {//Alex
     cmdh.send_command(Protocol::ANS_END);
 } 
 
-void list_articles(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { 
-    cmdh.send_command(Protocol::ANS_LIST_ART);
-
+void list_articles(CommandHandler cmdh, DBinterface* db) { 
     int newsGroupID = cmdh.receive_int();
+    
+    cmdh.assert_ended();
+
+
+    cmdh.send_command(Protocol::ANS_LIST_ART);
 
     std::list<Article> articles = db->listArticles(newsGroupID);
 
@@ -58,7 +63,7 @@ void list_articles(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void get_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { 
+void get_article(CommandHandler cmdh, DBinterface* db) { 
     cmdh.send_command(Protocol::ANS_GET_ART);
 
     int newsGroupID = cmdh.receive_int();
@@ -81,7 +86,7 @@ void get_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {
 
 
 
-void create_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //ALEX
+void create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
     string ngName = cmdh.receive_string();
 
     cmdh.assert_ended();
@@ -99,7 +104,7 @@ void create_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //ALEX
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void write_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Alex
+void write_article(CommandHandler cmdh, DBinterface* db) { //Alex
     int ngId = cmdh.receive_int();
     string title = cmdh.receive_string();
     string author = cmdh.receive_string();
@@ -118,7 +123,7 @@ void write_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Al
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Alex 
+void delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex 
     int ngId = cmdh.receive_int();
 
     cmdh.assert_ended();
@@ -134,7 +139,7 @@ void delete_ng(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) { //Alex
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_article(CommandHandler cmdh, std::unique_ptr<DBinterface>& db) {
+void delete_article(CommandHandler cmdh, DBinterface* db) {
     int ngId = cmdh.receive_int();
     int artId = cmdh.receive_int();
 
@@ -179,8 +184,9 @@ Server init(int argc, char* argv[]) {
         return server;
 }
 
-std::unique_ptr<DBinterface> startDB() { //ptr?
-    return std::make_unique<DBmem>();
+//TODO: template metoden som ska överskuggas i de olika servertyperna. 
+DBinterface* startDB() { //ptr?
+    return new DBmem();
 }
 
 
@@ -188,7 +194,7 @@ std::unique_ptr<DBinterface> startDB() { //ptr?
 int main(int argc, char *argv[])
 {
     Server server = init(argc, argv);
-    std::unique_ptr<DBinterface> db = startDB();
+    DBinterface* db = startDB();
 
     while (true)
     {
@@ -249,5 +255,6 @@ int main(int argc, char *argv[])
         }
     }
 
+    delete db;
     return 0;
 }

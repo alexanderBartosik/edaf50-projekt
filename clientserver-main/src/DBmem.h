@@ -12,7 +12,7 @@ public:
 
     std::list<NewsGroup> listNewsGroup() const;
 
-    bool addNewsGroup(string newsGroupName);;
+    bool addNewsGroup(string newsGroupName);
 
     std::string getNewsGroup(string newsGroupName) const;
 

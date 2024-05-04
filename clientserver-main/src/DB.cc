@@ -127,13 +127,13 @@ Article DB :: getArticle(int articleId, int newsGroupId) const {
     return Article(title, author, text, articleId);
 }
 
-bool DB :: removeArticle(int articleId, int newsGroupId) {
+int DB :: removeArticle(int articleId, int newsGroupId) {
     fs::path articlePath = dbPath / to_string(newsGroupId) / to_string(articleId);
     if (fs::exists(articlePath)) {
         fs::remove(articlePath);
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
 string DB :: getNewsGroup(string newsGroupName) const {

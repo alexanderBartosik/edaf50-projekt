@@ -9,6 +9,8 @@
 #include <filesystem>
 using namespace std;
 
+namespace fs = std::__fs::filesystem;
+
 class DB : public DBinterface {
 
 public:
@@ -29,7 +31,7 @@ public:
 
     Article getArticle(int articleId, int newGroupId) const;
 
-    bool removeArticle(int articleId, int newsGroupId);
+    int removeArticle(int articleId, int newsGroupId);
 
     ~DB() {}
 
