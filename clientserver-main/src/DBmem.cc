@@ -9,14 +9,6 @@
 
 using namespace std;
 
-DBmem :: DBmem() {
-    // Constructor
-}
-
-DBmem :: ~DBmem() {
-    // Destructor
-}
-
 list<NewsGroup> DBmem :: listNewsGroup() const {
     // List all news groups
     list<NewsGroup> newsGroupList;
