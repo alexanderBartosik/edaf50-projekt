@@ -10,7 +10,7 @@
 #include <regex>
 
 
-namespace fs = std::filesystem;
+namespace fs = std::__fs::filesystem;
 using namespace std;
 
 
@@ -39,6 +39,11 @@ list<NewsGroup> DB :: listNewsGroup() const {
         list.emplace_back(name, stoi(ngid));
     }
     return list;
+}
+
+bool DB :: newsGroupExists(int newsGroupId) const {
+    //TODO
+    return false;
 }
 
 bool DB :: addNewsGroup(string newsGroupName) {

@@ -1,14 +1,4 @@
-#include "../include/server.h"
-#include "../include/protocol.h"
-#include "../include/connection.h"
-#include "../include/connectionclosedexception.h"
-#include "CommandHandler.h"
-
-#include "DBinterface.h" //?
-//#include "DB.h"
-#include "DBmem.h"
-#include <iostream>
-#include <memory>
+#include "ServerInterface.h"
 
 using std::string;
 using std::cerr;
@@ -18,7 +8,7 @@ using std::unique_ptr;
 
 
 
-void list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
+void AbstractServer::list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
     cmdh.assert_ended();
 
     std::list<NewsGroup> nglist = db->listNewsGroup();
@@ -35,7 +25,7 @@ void list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
     cmdh.send_command(Protocol::ANS_END);
 } 
 
-void list_articles(CommandHandler cmdh, DBinterface* db) { 
+void AbstractServer::list_articles(CommandHandler cmdh, DBinterface* db) { 
     int newsGroupID = cmdh.receive_int();
     
     cmdh.assert_ended();
@@ -63,7 +53,7 @@ void list_articles(CommandHandler cmdh, DBinterface* db) {
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void get_article(CommandHandler cmdh, DBinterface* db) { 
+void AbstractServer::get_article(CommandHandler cmdh, DBinterface* db) { 
     int newsGroupID = cmdh.receive_int();
     int articleID = cmdh.receive_int();
 
@@ -88,7 +78,7 @@ void get_article(CommandHandler cmdh, DBinterface* db) {
 
 
 
-void create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
+void AbstractServer::create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
     string ngName = cmdh.receive_string();
 
     cmdh.assert_ended();
@@ -107,7 +97,7 @@ void create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
 }
 
 
-void write_article(CommandHandler cmdh, DBinterface* db) { //Alex
+void AbstractServer::write_article(CommandHandler cmdh, DBinterface* db) { //Alex
     int ngId = cmdh.receive_int();
     string title = cmdh.receive_string();
     string author = cmdh.receive_string();
@@ -128,7 +118,7 @@ void write_article(CommandHandler cmdh, DBinterface* db) { //Alex
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex 
+void AbstractServer::delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex 
     int ngId = cmdh.receive_int();
 
     cmdh.assert_ended();
@@ -146,7 +136,7 @@ void delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void delete_article(CommandHandler cmdh, DBinterface* db) {
+void AbstractServer::delete_article(CommandHandler cmdh, DBinterface* db) {
     int ngId = cmdh.receive_int();
     int artId = cmdh.receive_int();
 
@@ -171,7 +161,7 @@ void delete_article(CommandHandler cmdh, DBinterface* db) {
 
 
 //(myserver.cc)
-Server init(int argc, char* argv[]) {
+Server AbstractServer::init(int argc, char* argv[]) {
         if (argc != 2) {
                 cerr << "Usage: myserver port-number" << endl;
                 exit(1);
@@ -193,14 +183,11 @@ Server init(int argc, char* argv[]) {
         return server;
 }
 
-//TODO: template metoden som ska överskuggas i de olika servertyperna. 
-DBinterface* startDB() { //ptr?
-    return new DBmem();
-}
+//TEMPLATE METHOD
+DBinterface* startDB();
 
 
-
-int main(int argc, char *argv[])
+void AbstractServer::runServer(int argc, char *argv[])
 {
     Server server = init(argc, argv);
     DBinterface* db = startDB();
@@ -267,5 +254,4 @@ int main(int argc, char *argv[])
     }
 
     delete db;
-    return 0;
 }

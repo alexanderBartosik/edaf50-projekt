@@ -1,8 +1,8 @@
 #ifndef DB_H
 #define DB_H
 
-#include "dBinterface.h"
-#include "newsgroup.h"
+#include "DBinterface.h"
+#include "NewsGroup.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -15,13 +15,15 @@ class DB : public DBinterface {
 
 public:
     
-    DB() {}
+    DB();
 
     std::list<NewsGroup> listNewsGroup() const;
 
     bool addNewsGroup(string newsGroupName);
 
     std::string getNewsGroup(string newsGroupName) const;
+
+    bool newsGroupExists(int newsGroupId) const; 
 
     bool removeNewsGroup(int newsGroupId);
 
@@ -33,7 +35,7 @@ public:
 
     int removeArticle(int articleId, int newsGroupId);
 
-    ~DB() {}
+    ~DB();
 
 private:
     int newsGroupId = 0;
