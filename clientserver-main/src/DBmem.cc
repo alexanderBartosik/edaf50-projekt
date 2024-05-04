@@ -12,8 +12,8 @@ using namespace std;
 list<NewsGroup> DBmem :: listNewsGroup() const {
     // List all news groups
     list<NewsGroup> newsGroupList;
-    for (auto it = newsGroups.begin(); it != newsGroups.end(); ++it) {
-        newsGroupList.push_back(it->second);
+    for(auto i : newsGroups){
+        newsGroupList.push_back(i.second);
     }
     return newsGroupList;
 }
