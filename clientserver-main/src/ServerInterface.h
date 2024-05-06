@@ -2,10 +2,10 @@
 #ifndef SERVER_INTERFACE_H
 #define SERVER_INTERFACE_H
 
-#include "../include/server.h"
-#include "../include/protocol.h"
-#include "../include/connection.h"
-#include "../include/connectionclosedexception.h"
+#include "server.h"
+#include "protocol.h"
+#include "connection.h"
+#include "connectionclosedexception.h"
 #include "CommandHandler.h"
 #include "DBinterface.h"
 #include "DB.h"

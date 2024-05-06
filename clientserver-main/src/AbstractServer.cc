@@ -8,8 +8,8 @@ using std::unique_ptr;
 
 
 
-void AbstractServer::list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
-    cmdh.assert_ended();
+void AbstractServer::list_ng(CommandHandler cmdh, DBinterface* db) {
+    cmdh.com_ended();
 
     std::list<NewsGroup> nglist = db->listNewsGroup();
     int ngsize = nglist.size();
@@ -28,14 +28,13 @@ void AbstractServer::list_ng(CommandHandler cmdh, DBinterface* db) {//Alex
 void AbstractServer::list_articles(CommandHandler cmdh, DBinterface* db) { 
     int newsGroupID = cmdh.receive_int();
     
-    cmdh.assert_ended();
+    cmdh.com_ended();
 
     cmdh.send_command(Protocol::ANS_LIST_ART);
 
     bool ngexists = db->newsGroupExists(newsGroupID);
 
     std::list<Article> articles = db->listArticles(newsGroupID);
-    cout << "nbr of articles in news group " << newsGroupID << ": " << articles.size() << endl;
 
     //If the newsgroup id does not exist
     if (!ngexists) { //TODO: check if this is correct
@@ -57,7 +56,7 @@ void AbstractServer::get_article(CommandHandler cmdh, DBinterface* db) {
     int newsGroupID = cmdh.receive_int();
     int articleID = cmdh.receive_int();
 
-    cmdh.assert_ended();
+    cmdh.com_ended();
 
     cmdh.send_command(Protocol::ANS_GET_ART);
 
@@ -78,10 +77,10 @@ void AbstractServer::get_article(CommandHandler cmdh, DBinterface* db) {
 
 
 
-void AbstractServer::create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
+void AbstractServer::create_ng(CommandHandler cmdh, DBinterface* db) {
     string ngName = cmdh.receive_string();
 
-    cmdh.assert_ended();
+    cmdh.com_ended();
  
     bool created = db->addNewsGroup(ngName);
 
@@ -97,13 +96,13 @@ void AbstractServer::create_ng(CommandHandler cmdh, DBinterface* db) { //ALEX
 }
 
 
-void AbstractServer::write_article(CommandHandler cmdh, DBinterface* db) { //Alex
+void AbstractServer::write_article(CommandHandler cmdh, DBinterface* db) {
     int ngId = cmdh.receive_int();
     string title = cmdh.receive_string();
     string author = cmdh.receive_string();
     string text = cmdh.receive_string();
 
-    cmdh.assert_ended();
+    cmdh.com_ended();
 
     bool created = db->addArticle(title, author, text, ngId);
 
@@ -118,10 +117,10 @@ void AbstractServer::write_article(CommandHandler cmdh, DBinterface* db) { //Ale
     cmdh.send_command(Protocol::ANS_END);
 }
 
-void AbstractServer::delete_ng(CommandHandler cmdh, DBinterface* db) { //Alex 
+void AbstractServer::delete_ng(CommandHandler cmdh, DBinterface* db) {
     int ngId = cmdh.receive_int();
 
-    cmdh.assert_ended();
+    cmdh.com_ended();
 
     bool removed = db->removeNewsGroup(ngId);
 
@@ -140,7 +139,7 @@ void AbstractServer::delete_article(CommandHandler cmdh, DBinterface* db) {
     int ngId = cmdh.receive_int();
     int artId = cmdh.receive_int();
 
-    cmdh.assert_ended();
+    cmdh.com_ended();
 
     int removed = db->removeArticle(artId, ngId);
 
@@ -197,15 +196,12 @@ void AbstractServer::runServer(int argc, char *argv[])
         auto conn = server.waitForActivity();
         if (conn != nullptr)
         {
-            CommandHandler cmdh(conn); //shared_ptr or not, might have to change!
+            CommandHandler cmdh(conn);
             try
             {
                 Protocol msg = cmdh.receive_command();
-                int msgchar = static_cast<int>(msg);
-                cout << "msg: " << msgchar << endl;
 
                 switch(msg) {
-                    //TODO: call methods depending on command
                     case Protocol::COM_LIST_NG:
                         list_ng(cmdh, db);
                         break;

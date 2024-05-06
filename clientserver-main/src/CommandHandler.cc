@@ -1,6 +1,9 @@
 #include "CommandHandler.h"
 #include "../include/connectionclosedexception.h"
+#include <iostream>
 
+using std::cout;
+using std::endl;
 
 //antar just nu att denna används bara!
 CommandHandler::CommandHandler(shared_ptr<Connection>& c): conn(c) {}
@@ -68,7 +71,7 @@ std::string CommandHandler::receive_string() {
         }
         return s;
     } else {
-        throw ConnectionClosedException();
+        throw_protocol_error();
     }
         
 }
@@ -77,7 +80,16 @@ Protocol CommandHandler::receive_command() {
     return static_cast<Protocol>(conn->read());
 }
 
-void CommandHandler::assert_ended() {
-    if (receive_command() != Protocol::COM_END) throw ConnectionClosedException();
+void CommandHandler::com_ended() {
+    if (receive_command() != Protocol::COM_END) throw_protocol_error();
 }
 
+void CommandHandler::ans_ended() {
+    if (receive_command() != Protocol::ANS_END) throw_protocol_error();
+}
+
+
+void CommandHandler::throw_protocol_error() {
+    cout << "ERROR: protocol violated" << endl;
+    throw ConnectionClosedException();
+}
